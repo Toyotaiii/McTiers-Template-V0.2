@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reply Desk – Support Template Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0f1218;--side:#131822;--panel:#181e2a;--panel2:#1e2533;--line:#2a3243;--text:#e8ebf2;--muted:#8d97ab;--accent:#7c9cff;--ok:#5fd4a0;
+--appeals:#a78bfa;--reports:#f2b35e;--general:#4fd1c0;--bugs:#f27b8d;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.app{display:grid;grid-template-columns:268px minmax(0,1fr);min-height:100vh}
+aside{background:var(--side);border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px}
+.logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#7c9cff,#a78bfa);display:grid;place-items:center;color:#0f1218;box-shadow:0 6px 18px rgba(124,156,255,.28)}
+.brand b{font-size:17px;letter-spacing:-.01em;display:block;line-height:1.2}
+.brand span{font-size:12.5px;color:var(--muted)}
+nav{display:flex;flex-direction:column;gap:4px}
+.nav{--c:var(--accent);display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:0;background:none;border-radius:12px;color:var(--muted);cursor:pointer;text-align:left;font-weight:600;font-size:14.5px;position:relative;transition:background .2s,color .2s,transform .2s}
+.nav svg{color:var(--c);opacity:.8;transition:opacity .2s}
+.nav .n{margin-left:auto;font-size:12px;background:var(--panel2);padding:2px 8px;border-radius:99px;color:var(--muted);font-weight:600}
+.nav:hover{background:var(--panel);color:var(--text)}
+.nav:hover svg{opacity:1}
+.nav.on{background:var(--panel2);color:var(--text)}
+.nav.on::before{content:"";position:absolute;left:-16px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--c)}
+.nav.on svg{opacity:1}
+.tip{margin-top:auto;font-size:13px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;line-height:1.5}
+.tip b{color:var(--text);font-weight:600}
+main{padding:28px clamp(16px,4vw,48px) 64px;max-width:1100px;width:100%}
+.top{position:sticky;top:0;z-index:5;margin:-28px calc(-1 * clamp(16px,4vw,48px)) 0;padding:20px clamp(16px,4vw,48px) 16px;padding-top:calc(20px + env(safe-area-inset-top,0px));background:linear-gradient(var(--bg) 78%,rgba(15,18,24,0))}
+.search{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:0 16px;height:56px;box-shadow:0 8px 28px rgba(0,0,0,.28);transition:border-color .2s,box-shadow .2s}
+.search:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(124,156,255,.14),0 8px 28px rgba(0,0,0,.28)}
+.search svg{color:var(--muted)}
+.search input{flex:1;min-width:0;background:none;border:0;outline:0;font-size:16px}
+.search input::placeholder{color:#6c7589}
+.kbd{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:7px;padding:1px 8px}
+.clear{display:none;border:0;background:var(--panel2);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;align-items:center;justify-content:center;transition:color .2s}
+.clear:hover{color:var(--text)}
+.search.has .clear{display:flex}.search.has .kbd{display:none}
+.head{margin:22px 0 18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.head h1{margin:0;font-size:clamp(24px,3.4vw,32px);letter-spacing:-.025em;font-weight:800}
+.head p{margin:0;color:var(--muted);font-size:14.5px}
+#list{display:flex;flex-direction:column;gap:12px}
+#list.swap{animation:swap .28s ease}
+@keyframes swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{--c:var(--accent);background:var(--panel);border:1px solid var(--line);border-radius:18px;transition:border-color .2s,transform .2s,box-shadow .2s,background .2s;overflow:hidden}
+.card:hover{border-color:#3a455c;transform:translateY(-1px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+.card.open{border-color:color-mix(in srgb,var(--c) 55%,var(--line));background:linear-gradient(180deg,var(--panel2),var(--panel) 140px)}
+.row{display:flex;align-items:flex-start;gap:8px;padding:6px 8px 0 6px}
+.tog{flex:1;min-width:0;display:flex;gap:14px;align-items:flex-start;text-align:left;background:none;border:0;padding:14px 10px 12px;cursor:pointer;border-radius:14px}
+.tog:focus-visible,.copy:focus-visible,.nav:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.dot{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);flex:none}
+.tt{min-width:0}
+.tt h3{margin:0;font-size:16.5px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{font-size:12px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent);padding:1px 9px;border-radius:99px}
+.tt p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.chev{margin-left:auto;margin-top:10px;color:var(--muted);transition:transform .25s;flex:none}
+.card.open .chev{transform:rotate(180deg)}
+.copy{margin-top:12px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel2);border-radius:11px;padding:8px 14px;font-weight:600;font-size:13.5px;cursor:pointer;transition:background .2s,border-color .2s,color .2s,transform .15s;flex:none}
+.copy:hover{background:color-mix(in srgb,var(--c) 18%,var(--panel2));border-color:var(--c)}
+.copy:active{transform:scale(.96)}
+.copy.done{background:color-mix(in srgb,var(--ok) 18%,var(--panel2));border-color:var(--ok);color:var(--ok)}
+.body{padding:0 16px 16px 70px}
+.msg{margin:0;white-space:pre-wrap;word-break:break-word;font-size:14.5px;line-height:1.65;background:#0f131b;border:1px solid var(--line);border-left:3px solid var(--c);border-radius:6px 12px 12px 6px;padding:14px 16px;color:#cfd5e2;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-family:inherit}
+.card.open .msg{-webkit-line-clamp:unset;display:block}
+.ph{color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);border-radius:5px;padding:0 4px;font-weight:600}
+.ph.f{color:var(--text);background:color-mix(in srgb,var(--ok) 16%,transparent)}
+.fields{display:none;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:12px}
+.card.open .fields{display:grid;animation:swap .25s ease}
+.fields label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);font-weight:600}
+.fields input{background:#0f131b;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px;outline:0;transition:border-color .2s,box-shadow .2s}
+.fields input:focus{border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 18%,transparent)}
+.card.note{border-style:dashed}.badge.int,.badge.g{color:var(--text);background:var(--line)}.warn{font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:8px}.card.note .msg{border-left-style:dashed}
+.grp{display:flex;align-items:center;gap:12px;margin:16px 4px 2px;font-size:14px;font-weight:700;color:var(--muted)}.grp::after{content:"";flex:1;height:1px;background:var(--line)}
+.empty{text-align:center;color:var(--muted);padding:64px 20px;border:1px dashed var(--line);border-radius:18px}
+.empty b{display:block;color:var(--text);font-size:17px;margin-bottom:4px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,24px);opacity:0;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:11px 18px;font-size:14px;font-weight:600;box-shadow:0 12px 36px rgba(0,0,0,.45);transition:.25s;pointer-events:none;z-index:20;display:flex;gap:10px;align-items:center;max-width:calc(100vw - 32px)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast svg{color:var(--ok)}
+mark{background:rgba(124,156,255,.16);color:#eef2ff;border-radius:5px;padding:0 3px;margin:0 -1px;box-shadow:0 0 0 1px rgba(124,156,255,.28),0 0 12px rgba(124,156,255,.4);text-shadow:0 0 8px rgba(124,156,255,.6);animation:mk .3s ease-out,glow 3s ease-in-out .3s infinite alternate}
+@keyframes mk{from{background:transparent;box-shadow:0 0 0 0 transparent;color:inherit;text-shadow:none}}
+@keyframes glow{from{box-shadow:0 0 0 1px rgba(124,156,255,.22),0 0 7px rgba(124,156,255,.25)}to{box-shadow:0 0 0 1px rgba(124,156,255,.34),0 0 15px rgba(124,156,255,.5)}}
+.kws{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.kw{font-size:12px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:1px 10px}
+.modebar{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap}
+.mode{--m:#7c9cff;position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;min-width:300px;max-width:100%}
+.mode[data-mode=internal]{--m:#f2b35e}
+.thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:10px;background:color-mix(in srgb,var(--m) 20%,var(--panel2));border:1px solid color-mix(in srgb,var(--m) 55%,transparent);box-shadow:0 4px 16px color-mix(in srgb,var(--m) 22%,transparent);transition:transform .32s cubic-bezier(.4,0,.2,1),background .3s,border-color .3s,box-shadow .3s}
+.mode[data-mode=internal] .thumb,.mode[data-scope=cat] .thumb{transform:translateX(100%)}
+.mode.sc{--m:#4fd1c0}
+.mode button{position:relative;z-index:1;border:0;background:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border-radius:10px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;transition:color .25s;white-space:nowrap}
+.mode button:hover,.mode button[aria-checked=true]{color:var(--text)}
+.mode button[aria-checked=true] svg{color:var(--m)}
+.mode button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mhint{font-size:13px;color:var(--muted)}
+@media(max-width:860px){
+.app{grid-template-columns:minmax(0,1fr)}
+aside{position:static;height:auto;flex-direction:row;align-items:center;padding:14px 16px 0;border:0;background:none;gap:0;flex-direction:column;align-items:stretch}
+.brand{padding:0 0 12px}
+nav{flex-direction:row;overflow-x:auto;gap:8px;padding-bottom:4px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.nav{width:auto;white-space:nowrap;background:var(--panel);border:1px solid var(--line);padding:9px 14px;flex:none}
+.nav.on::before{display:none}.nav.on{border-color:var(--c)}
+.tip{display:none}
+main{padding-top:6px}
+.top{margin-top:0;position:static;padding-top:14px;background:none}
+.body{padding:0 14px 14px}
+}
+@media(max-width:560px){
+.row{flex-wrap:wrap}.tog{flex-basis:100%}
+.copy{margin:0 0 12px 14px}.copy span{display:inline}
+.dot{display:none}.kbd{display:none}.mode{width:100%;min-width:0}.mode button{padding:9px 8px;font-size:13.5px}.mhint{display:none}
+.tt p{font-size:13.5px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<!--glass-->
+<style id="glass">
+:root{--bg:#090c13;--panel:rgba(255,255,255,.055);--panel2:rgba(255,255,255,.095);--line:rgba(255,255,255,.13)}
+body{background:#090c13}
+.orbs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.orbs i{position:absolute;width:46vmax;height:46vmax;border-radius:50%;filter:blur(70px);opacity:.38;animation:drift 28s ease-in-out infinite alternate;will-change:transform}
+.orbs i:nth-child(1){background:radial-gradient(circle,#5b7cff,transparent 65%);left:-12vmax;top:-14vmax}
+.orbs i:nth-child(2){background:radial-gradient(circle,#a78bfa,transparent 65%);right:-16vmax;top:18vh;animation-duration:34s;animation-delay:-8s}
+.orbs i:nth-child(3){background:radial-gradient(circle,#4fd1c0,transparent 65%);left:22vw;bottom:-24vmax;animation-duration:31s;animation-delay:-15s;opacity:.28}
+@keyframes drift{to{transform:translate3d(8vmax,6vmax,0) scale(1.12)}}
+.app{position:relative;z-index:1}
+.search,.card,.mode,.tip,.copy,.empty,.kw,#toast,.nav.on{-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.search{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.03),0 12px 36px rgba(0,0,0,.35)}
+.search:focus-within{border-color:rgba(160,185,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 0 0 4px rgba(124,156,255,.16),0 12px 36px rgba(0,0,0,.35)}
+.nav.on{background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 6px 18px rgba(0,0,0,.25)}
+.nav{transition:background .3s,color .3s,transform .35s cubic-bezier(.34,1.4,.5,1)}
+.nav:hover{transform:translateX(3px)}
+.tip,.empty{background:rgba(255,255,255,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.card{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.03),0 14px 40px rgba(0,0,0,.32);transition:transform .45s cubic-bezier(.34,1.4,.5,1),border-color .3s,box-shadow .3s,background .35s}
+.card::before{content:"";position:absolute;left:10%;right:10%;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);pointer-events:none}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(280px circle at var(--mx,50%) var(--my,-30%),rgba(255,255,255,.13),transparent 65%);opacity:0;transition:opacity .4s}
+.card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 20px 50px rgba(0,0,0,.4)}
+.card:hover::after{opacity:1}
+.card.open{background:linear-gradient(135deg,color-mix(in srgb,var(--c) 20%,rgba(255,255,255,.08)),rgba(255,255,255,.035) 70%);border-color:color-mix(in srgb,var(--c) 50%,rgba(255,255,255,.2))}
+.dot{background:linear-gradient(145deg,color-mix(in srgb,var(--c) 28%,rgba(255,255,255,.1)),color-mix(in srgb,var(--c) 8%,transparent));box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.copy{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.25);transition:background .3s,border-color .3s,color .3s,transform .35s cubic-bezier(.34,1.5,.5,1)}
+.copy:hover{background:color-mix(in srgb,var(--c) 26%,rgba(255,255,255,.08));transform:translateY(-1px) scale(1.04)}
+.copy:active{transform:scale(.94)}
+.msg{background:rgba(6,9,15,.5);border-color:rgba(255,255,255,.1);box-shadow:inset 0 2px 8px rgba(0,0,0,.25)}
+.fields input{background:rgba(6,9,15,.5);border-color:rgba(255,255,255,.12)}
+.kw{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
+.mode{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 24px rgba(0,0,0,.25)}
+.thumb{background:linear-gradient(180deg,color-mix(in srgb,var(--m) 42%,rgba(255,255,255,.22)),color-mix(in srgb,var(--m) 16%,rgba(255,255,255,.06)));border:1px solid rgba(255,255,255,.3);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -8px 14px rgba(255,255,255,.05),0 8px 22px color-mix(in srgb,var(--m) 34%,transparent);transition:transform .6s cubic-bezier(.34,1.45,.5,1),background .45s,box-shadow .45s}
+.mode button{transition:color .3s}
+#toast{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 16px 40px rgba(0,0,0,.45)}
+@keyframes swap{from{opacity:0;transform:translateY(12px) scale(.985);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+#list.swap{animation:swap .5s cubic-bezier(.2,.8,.2,1)}
+@media(min-width:861px){
+aside{background:rgba(255,255,255,.035);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:inset -1px 0 0 rgba(255,255,255,.06)}
+.top{background:linear-gradient(rgba(9,12,19,.7) 70%,rgba(9,12,19,0))}
+}
+@media(max-width:560px){.card,.search,.mode,.copy,.kw{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}.orbs i{filter:blur(50px)}}
+@media(prefers-reduced-motion:reduce){.orbs i{animation:none}}
+</style>
+<style id="motion">
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.orbs i{filter:none;opacity:.34;animation-duration:44s}
+#toast{-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%)}
+.search,.mode{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(24,30,44,.78)}
+.card,.copy,.kw,.empty,.tip,.nav.on{-webkit-backdrop-filter:none;backdrop-filter:none}
+@media(min-width:861px){aside{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.04)}}
+@media(max-width:560px){.card,.copy,.kw{-webkit-backdrop-filter:none;backdrop-filter:none}}
+mark{animation:mk .3s ease-out,glow 3s ease-in-out .3s 3 alternate}
+/* list switching */
+#list{transition:opacity .13s ease,transform .13s ease}
+#list.out{opacity:0;transform:translateY(8px)}
+#list.swap{animation:none}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+#list.swap .card,#list.swap .grp,#list.swap .empty{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,6)*40ms)}
+@keyframes headin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.head.pop{animation:headin .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes bar{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.nav.on::before{animation:bar .45s cubic-bezier(.34,1.5,.5,1)}
+/* press feedback */
+.nav:active,.mode button:active,.clear:active{transform:scale(.96)}
+.tog:active .dot{transform:scale(.9)}
+.dot{transition:transform .35s cubic-bezier(.34,1.5,.5,1)}
+.chev{transition:transform .45s cubic-bezier(.34,1.5,.5,1),color .2s}
+.tog:hover .chev{color:var(--text)}
+.copy,.mode button,.tog,.clear,.gtab{position:relative;overflow:hidden}
+.rip{position:absolute;border-radius:50%;pointer-events:none;background:rgba(255,255,255,.26);transform:scale(0);animation:rip .6s ease-out forwards}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+@keyframes pop{40%{transform:scale(1.12)}}
+.copy.done{animation:pop .4s ease}
+/* smooth expand and collapse */
+.msg{display:block;-webkit-line-clamp:unset;max-height:calc(3.3em + 30px);overflow:hidden;transition:max-height .5s cubic-bezier(.2,.8,.2,1)}
+.card.open .msg{max-height:640px}
+.fields{display:grid;max-height:0;opacity:0;margin-bottom:0;overflow:hidden;visibility:hidden;transition:max-height .45s cubic-bezier(.2,.8,.2,1),opacity .3s ease,margin .35s ease,visibility 0s .45s}
+.card.open .fields{animation:none;max-height:240px;opacity:1;margin-bottom:12px;visibility:visible;transition-delay:0s}
+@media(prefers-reduced-motion:reduce){#list,.msg,.fields{transition:none!important}}
+</style>
+<style id="breathe">
+.orbs i{will-change:transform,opacity;animation:drift 44s ease-in-out infinite alternate,breathe 9s ease-in-out infinite alternate}
+.orbs i:nth-child(1){animation-duration:44s,9s;animation-delay:0s,0s}
+.orbs i:nth-child(2){animation-duration:36s,12s;animation-delay:-8s,-4s}
+.orbs i:nth-child(3){animation-duration:40s,10.5s;animation-delay:-15s,-7s}
+@keyframes breathe{from{scale:.92;opacity:.24}to{scale:1.16;opacity:.46}}
+@media(prefers-reduced-motion:reduce){.orbs i{animation:none;opacity:.32}}
+</style>
+<style id="bg2">
+.orbs i:nth-child(4){width:36vmax;height:36vmax;background:radial-gradient(circle,#f27b8d,transparent 65%);right:6vw;top:-20vmax;opacity:.3;animation-duration:38s,11s;animation-delay:-5s,-2s}
+.orbs i:nth-child(5){width:34vmax;height:34vmax;background:radial-gradient(circle,#f2b35e,transparent 65%);left:-12vmax;bottom:4vh;opacity:.26;animation-duration:42s,13s;animation-delay:-20s,-9s}
+.orbs::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.3px);background-size:30px 30px}
+</style>
+<style id="perf">
+.scrolling .orbs i{animation-play-state:paused}
+.scrolling .card{pointer-events:none}
+</style>
+<style id="theme">
+@property --o1{syntax:"<color>";inherits:true;initial-value:#5b7cff}
+@property --o2{syntax:"<color>";inherits:true;initial-value:#a78bfa}
+@property --o3{syntax:"<color>";inherits:true;initial-value:#4fd1c0}
+@property --o4{syntax:"<color>";inherits:true;initial-value:#f27b8d}
+@property --o5{syntax:"<color>";inherits:true;initial-value:#f2b35e}
+.orbs{--o1:#5b7cff;--o2:#a78bfa;--o3:#4fd1c0;--o4:#f27b8d;--o5:#f2b35e;transition:--o1 1.2s ease,--o2 1.2s ease,--o3 1.2s ease,--o4 1.2s ease,--o5 1.2s ease}
+.orbs i:nth-child(1){background:radial-gradient(circle,var(--o1),transparent 65%)}
+.orbs i:nth-child(2){background:radial-gradient(circle,var(--o2),transparent 65%)}
+.orbs i:nth-child(3){background:radial-gradient(circle,var(--o3),transparent 65%)}
+.orbs i:nth-child(4){background:radial-gradient(circle,var(--o4),transparent 65%)}
+.orbs i:nth-child(5){background:radial-gradient(circle,var(--o5),transparent 65%)}
+body[data-theme=appeals] .orbs{--o1:#a78bfa;--o2:#7c6cf0;--o3:#c084fc;--o4:#5b7cff;--o5:#f27bd1}
+body[data-theme=reports] .orbs{--o1:#f2b35e;--o2:#f28b5e;--o3:#f2d35e;--o4:#f27b8d;--o5:#a78bfa}
+body[data-theme=general] .orbs{--o1:#4fd1c0;--o2:#3aa8e0;--o3:#5be0a0;--o4:#5b7cff;--o5:#a78bfa}
+body[data-theme=bugs] .orbs{--o1:#f27b8d;--o2:#f2605e;--o3:#d65bf2;--o4:#f2b35e;--o5:#a78bfa}
+</style>
+<style id="open">
+.msg{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;max-height:none;overflow:hidden;transition:none}
+.card.open .msg{display:block;-webkit-line-clamp:unset;max-height:none}
+.fields{display:none;max-height:none;opacity:1;margin-bottom:0;visibility:visible;overflow:visible;transition:none}
+.card.open .fields{display:grid;margin-bottom:12px;animation:fieldin .4s .06s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes fieldin{from{opacity:0;transform:translateY(-6px)}}
+.card.will-close .chev{transform:none}
+.card.will-close .fields{animation:none}
+</style>
+<style id="static">
+/* nothing follows the scroll: the search row, switches and category buttons all sit in the page flow */
+.top{position:static;background:none;z-index:auto}
+aside{position:static;height:auto}
+@media(min-width:861px){aside .tip{margin-top:4px}}
+/* collapsible circular search */
+.search{width:52px;height:52px;padding:0;gap:0;border-radius:26px;overflow:hidden;cursor:pointer;transition:width .55s cubic-bezier(.2,.8,.2,1),border-radius .55s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .25s,transform .35s cubic-bezier(.34,1.5,.5,1)}
+.search:not(.open):hover{transform:scale(1.07)}
+.search:not(.open):active{transform:scale(.94)}
+.search.open{width:100%;border-radius:18px;cursor:text}
+.s-btn{flex:none;width:52px;height:52px;border:0;padding:0;background:none;display:grid;place-items:center;color:var(--muted);cursor:pointer;border-radius:50%;transition:color .3s}
+.s-btn svg{width:20px;height:20px;color:inherit}
+.search:hover .s-btn,.search.open .s-btn{color:var(--text)}
+.search input{opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s .4s}
+.search.open input{opacity:1;visibility:visible;transition:opacity .35s ease .18s,visibility 0s}
+.search .kbd{display:none;margin-right:14px}
+.search.open .kbd{display:inline-block}
+.search.open.has .kbd{display:none}
+.search .clear{display:none;margin-right:12px}
+.search.open .clear{display:flex}
+</style>
+<style id="themes2">
+body[data-theme=support] .orbs{--o1:#4fd1c0;--o2:#3aa8e0;--o3:#5be0a0;--o4:#5b7cff;--o5:#a78bfa}
+body[data-theme=testing] .orbs{--o1:#f2b35e;--o2:#f28b5e;--o3:#f2d35e;--o4:#f27b8d;--o5:#a78bfa}
+</style>
+<style id="sticky">
+/* search: full bar at the top, follows the scroll as a circle */
+.searchwrap{position:sticky;top:calc(14px + env(safe-area-inset-top,0px));z-index:20;height:52px;pointer-events:none}
+.searchwrap .search{pointer-events:auto;position:relative;background:rgba(22,28,42,.94);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 10px 30px rgba(0,0,0,.4)}
+.top{margin:14px 0 0;padding:0}
+.search.has:not(.open)::after{content:"";position:absolute;top:11px;right:11px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+</style>
+<style id="dyn">
+.vt{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;line-height:1.55;padding:0 8px;border-radius:99px;border:1px solid;flex:none;margin-left:-2px}
+.vt.public{color:#5fd4a0;background:rgba(95,212,160,.12);border-color:rgba(95,212,160,.38)}
+.vt.private{color:#f2a35e;background:rgba(242,163,94,.12);border-color:rgba(242,163,94,.38)}
+.fg{grid-column:1/-1;display:flex;flex-direction:column;gap:6px;padding-top:4px}
+.fgh{font-size:12.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px}
+.fgh::after{content:"";flex:1;height:1px;background:var(--line)}
+.fr{display:grid;grid-template-columns:18px auto 72px minmax(0,1fr);gap:8px;align-items:center}
+.fn{font-size:12px;color:var(--muted);font-weight:700;text-align:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:rgba(6,9,15,.5)}
+.seg button{border:0;background:none;padding:8px 12px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+.seg button:hover{color:var(--text)}
+.seg button.on{color:#0f1218;background:var(--ok)}
+.seg button.on.lost{background:#f27b8d}
+.fields .sc{text-align:center}
+.fields input.bad{border-color:#f27b8d}
+.opt{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,170px);gap:8px;align-items:center}
+.fields .ck{flex-direction:row;align-items:center;gap:8px;color:var(--text);font-weight:600;cursor:pointer}
+.fields input[type=checkbox]{width:16px;height:16px;padding:0;accent-color:var(--c);flex:none;appearance:auto}
+.cb{position:relative;display:block}
+.cb .cbi{width:100%;padding-right:30px}
+.cb .cbi:not(:placeholder-shown){text-transform:uppercase}
+.cb .cbc{position:absolute;right:9px;top:50%;margin-top:-9px;pointer-events:none;color:var(--muted)}
+#cbpop{position:fixed;z-index:60;max-height:240px;overflow:auto;background:rgba(22,28,42,.98);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:4px;box-shadow:0 16px 40px rgba(0,0,0,.5)}
+#cbpop[hidden]{display:none}
+#cbpop .o{padding:8px 12px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+#cbpop .o:hover,#cbpop .o.act{background:rgba(124,156,255,.2)}
+#cbpop .o.sel{color:var(--accent)}
+#cbpop .o.none{color:var(--muted);cursor:default}
+@media(max-width:560px){.opt{grid-template-columns:1fr}.fr{grid-template-columns:16px auto 62px minmax(0,1fr);gap:6px}.seg button{padding:8px 9px}}
+body[data-theme=guide] .orbs{--o1:#a78bfa;--o2:#7c6cf0;--o3:#c084fc;--o4:#5b7cff;--o5:#f27bd1}
+/* fix: open fields were capped at 240px and spilled over the preview */
+.card.open .fields{max-height:none;overflow:visible}
+.card.open .body{display:flex;flex-direction:column}
+.fields{position:relative;z-index:1}
+.msg{position:relative}
+.msg a{color:var(--accent);text-decoration:underline;word-break:break-all}
+</style>
+<style id="guide">
+.guide-on #mode,.guide-on #mhint{display:none}
+.gwrap{display:flex;flex-direction:column;gap:12px}
+.gpanel{display:flex;flex-direction:column;gap:12px;transition:opacity .13s ease,transform .13s ease}
+.gpanel.out{opacity:0;transform:translateY(8px)}
+#list.swap .gtabs{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards}
+#list.swap #gpanel>*,#gpanel.swap>*{animation:rise .5s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,6)*40ms)}
+#gpanel>:nth-child(1){--i:1}#gpanel>:nth-child(2){--i:2}#gpanel>:nth-child(3){--i:3}#gpanel>:nth-child(4){--i:4}#gpanel>:nth-child(5){--i:5}#gpanel>:nth-child(6){--i:6}
+.gtab{position:relative;overflow:hidden}
+.gtab:active{transform:scale(.96)}
+.gtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gtab{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(24,30,44,.78);color:var(--muted);font-weight:700;font-size:14px;cursor:pointer;transition:color .25s,border-color .25s,background .3s,box-shadow .3s,transform .35s cubic-bezier(.34,1.5,.5,1)}
+.gtab:hover{color:var(--text);border-color:rgba(255,255,255,.26)}
+.gtab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.gtab.on{color:var(--text);background:linear-gradient(180deg,color-mix(in srgb,var(--appeals) 38%,rgba(255,255,255,.1)),color-mix(in srgb,var(--appeals) 14%,rgba(255,255,255,.04)));border-color:color-mix(in srgb,var(--appeals) 60%,transparent);box-shadow:0 8px 22px color-mix(in srgb,var(--appeals) 25%,transparent)}
+.gtab.on svg{color:var(--appeals)}
+.ghead h2{margin:6px 0 4px;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.ghead p{margin:0 0 6px;color:var(--muted);font-size:14.5px}
+.gc{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.gc summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;font-weight:700;font-size:16px}
+.gc summary::-webkit-details-marker{display:none}
+.gc summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:18px}
+.gc summary .chev{margin:0;color:var(--muted);transition:transform .3s}
+.gc[open] summary .chev{transform:rotate(180deg)}
+.gb{padding:0 18px 16px;font-size:14.5px;line-height:1.65;color:#cfd5e2}
+.gb ul,.gb ol{margin:6px 0;padding-left:22px}.gb li{margin:5px 0}.gb p{margin:6px 0}
+.gb .hint{color:var(--muted);font-size:13px}
+.gb a{color:var(--accent);word-break:break-all}
+code.cmd,code.dc{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;border-radius:7px;padding:1px 7px;cursor:pointer;word-break:break-all;transition:filter .2s}
+code.cmd{background:rgba(124,156,255,.14);color:#c9d6ff;border:1px solid rgba(124,156,255,.3)}
+code.dc{background:rgba(79,209,192,.13);color:#aef0e6;border:1px solid rgba(79,209,192,.3)}
+code.cmd:hover,code.dc:hover{filter:brightness(1.25)}
+.rl{font-weight:700;font-size:13px;color:#f2b35e;background:rgba(242,179,94,.13);border:1px solid rgba(242,179,94,.3);border-radius:7px;padding:1px 7px}
+.gt{overflow-x:auto}.gt table{width:100%;border-collapse:collapse;min-width:380px}
+.gt th,.gt td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.gt th{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.gwarn,.gnote{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:14px 16px;font-size:14.5px;line-height:1.6}
+.gwarn p,.gnote p{margin:4px 0}.gwarn ul{margin:6px 0 2px;padding-left:20px}.gwarn b{font-size:16px;display:block;margin-bottom:2px}.gnote b{display:block}
+.gwarn{border:1px solid rgba(242,123,141,.5);background:linear-gradient(135deg,rgba(242,123,141,.17),rgba(242,123,141,.05));box-shadow:0 8px 28px rgba(242,123,141,.08)}
+.gwarn>svg{color:#f27b8d;margin-top:3px}
+.gnote{border:1px solid rgba(124,156,255,.35);background:rgba(124,156,255,.08)}.gnote>svg{color:var(--accent);margin-top:3px}
+.gb .gwarn,.gb .gnote{margin:6px 0}
+.glink{margin-left:4px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:var(--text);border-radius:9px;padding:3px 10px;font-weight:700;font-size:13px;cursor:pointer}
+.glink:hover{background:rgba(255,255,255,.16)}
+.rules li.sv{background:rgba(242,123,141,.09);border-left:3px solid #f27b8d;border-radius:6px;padding:6px 10px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:6px}
+.pi{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(6,9,15,.35)}
+.pi h4{margin:0 0 6px;font-size:14.5px}.pi ul{margin:4px 0 0;padding-left:18px;font-size:14px}
+.ptag{display:inline-block;font-size:11.5px;font-weight:800;border-radius:99px;padding:1px 10px;border:1px solid}
+.ptag.b{color:#f27b8d;background:rgba(242,123,141,.12);border-color:rgba(242,123,141,.4)}
+.ptag.t{color:#f2b35e;background:rgba(242,179,94,.12);border-color:rgba(242,179,94,.4)}
+.ptag.d{color:var(--muted);background:rgba(255,255,255,.06);border-color:var(--line)}
+@media(max-width:700px){.gtabs{grid-template-columns:1fr 1fr}.gtab{font-size:13.5px;padding:10px 8px}.gb{padding:0 14px 14px}.gc summary{padding:14px}}
+</style>
+<style id="checks">
+.fields input[type=checkbox],input[type=checkbox]{-webkit-appearance:none;appearance:none;position:relative;display:inline-block;flex:none;width:18px;height:18px;margin:0;padding:0;cursor:pointer;border:1.5px solid rgba(255,255,255,.28);border-radius:6px;background:rgba(6,9,15,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);transition:background .25s ease,border-color .25s ease,box-shadow .25s ease,transform .3s cubic-bezier(.34,1.5,.5,1)}
+.fields .ck:hover input[type=checkbox]{border-color:color-mix(in srgb,var(--c,var(--accent)) 75%,#fff 10%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 4px color-mix(in srgb,var(--c,var(--accent)) 14%,transparent)}
+.fields input[type=checkbox]:active{transform:scale(.86)}
+.fields input[type=checkbox]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fields input[type=checkbox]:checked{background:linear-gradient(145deg,color-mix(in srgb,var(--c,var(--accent)) 88%,#fff 14%),color-mix(in srgb,var(--c,var(--accent)) 72%,#000));border-color:var(--c,var(--accent));box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 3px 10px color-mix(in srgb,var(--c,var(--accent)) 38%,transparent);animation:ckpop .38s cubic-bezier(.34,1.5,.5,1),ckring .5s ease-out}
+.fields input[type=checkbox]::after{content:"";position:absolute;right:9px;bottom:4px;width:6px;height:10px;border:solid #0f1218;border-width:0 2.2px 2.2px 0;border-radius:1px;transform-origin:100% 100%;transform:rotate(45deg) scale(.5);opacity:0;transition:opacity .16s ease,transform .22s ease}
+.fields input[type=checkbox]:checked::after{opacity:1;transform:rotate(45deg) scale(1);animation:ckdraw .34s .06s cubic-bezier(.4,0,.2,1) both}
+@keyframes ckpop{40%{transform:scale(.84)}}
+@keyframes ckring{from{outline:0 solid color-mix(in srgb,var(--c,var(--accent)) 45%,transparent)}to{outline:7px solid transparent}}
+@keyframes ckdraw{from{width:0;height:0}38%{width:6px;height:0}to{width:6px;height:10px}}
+.fields .ck span{transition:color .25s}
+.fields .ck:active span{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.fields input[type=checkbox],.fields input[type=checkbox]::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<symbol id="grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+<symbol id="appeals" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3.5 3.5 0 0 0 6 0L5 7zM19 7l-3 7a3.5 3.5 0 0 0 6 0l-3-7z"/></symbol>
+<symbol id="reports" viewBox="0 0 24 24"><path d="M5 21V4m0 1h12l-2 4 2 4H5"/></symbol>
+<symbol id="general" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6M9 14h3"/></symbol>
+<symbol id="bugs" viewBox="0 0 24 24"><rect x="8" y="7" width="8" height="13" rx="4"/><path d="M9 7a3 3 0 0 1 6 0M4 13h4M16 13h4M5 7l3 3M19 7l-3 3M5 20l3-3M19 20l-3-3"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+<symbol id="copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 7v6l-4 2v-8L4 5z"/></symbol>
+<symbol id="trophy" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></symbol>
+<symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="guide" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5zM4 19a2 2 0 0 1 2-2h13M9 7h6"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.7-8 9-4.8-1.3-8-4.5-8-9V6l8-3z"/></symbol>
+<symbol id="alert" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19L12 4zM12 10v4M12 17v.5"/></symbol>
+<symbol id="msg" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z"/></symbol>
+</defs>
+</svg>
+
+<div class="orbs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="app">
+<aside>
+  <div class="brand">
+    <div class="logo"><svg class="i"><use href="#msg"/></svg></div>
+    <div><b>Reply Desk</b><span>Support template library</span></div>
+  </div>
+  <nav id="nav" aria-label="Categories"></nav>
+  <div class="tip"><b>How it works</b><br>Find a template, copy it and send. Private notes are marked and are never for the ticket user.</div>
+</aside>
+
+<main>
+  <div class="searchwrap">
+    <div class="search open" id="sb">
+      <button class="s-btn" id="sbtn" aria-label="Search" aria-expanded="true"><svg class="i"><use href="#search"/></svg></button>
+      <input id="q" type="search" placeholder="Search templates…" autocomplete="off" aria-label="Search templates">
+      <span class="kbd">Esc</span>
+      <button class="clear" id="clr" aria-label="Clear or close search"><svg class="i"><use href="#x"/></svg></button>
+    </div>
+  </div>
+  <div class="top">
+    <div class="modebar">
+      <div class="mode" id="mode" role="radiogroup" aria-label="Note type" data-mode="public">
+        <span class="thumb"></span>
+        <button role="radio" aria-checked="true" data-m="public"><svg class="i"><use href="#msg"/></svg>Public Messages</button>
+        <button role="radio" aria-checked="false" data-m="internal"><svg class="i"><use href="#lock"/></svg>Private Notes</button>
+      </div>
+      <div class="mode sc" id="scope" role="radiogroup" aria-label="Search scope" data-scope="all">
+        <span class="thumb"></span>
+        <button role="radio" aria-checked="true" data-s="all"><svg class="i"><use href="#grid"/></svg>All Categories</button>
+        <button role="radio" aria-checked="false" data-s="cat"><svg class="i"><use href="#filter"/></svg>Selected Category</button>
+      </div>
+      <span class="mhint" id="mhint">Messages visible to the ticket user</span>
+    </div>
+  </div>
+  <div class="head"><h1 id="ttl">All templates</h1><p id="sub"></p></div>
+  <div id="list"></div>
+</main>
+</div>
+<div id="cbpop" role="listbox" hidden></div>
+<div id="toast" role="status"><svg class="i"><use href="#check"/></svg><span id="tmsg"></span></div>
+
+<script>
+const SIGN = ""; /* no generic sign-off on any template */
+const H=t=>"Hello @user,\n\n"+t+SIGN;
+const CATS = {
+  all:{name:"All templates",icon:"grid",c:"var(--accent)",d:"Every response in one place."},
+  support:{name:"Support Tickets",icon:"general",c:"var(--general)",d:"Appeals, reports and general support."},
+  testing:{name:"Testing Tickets",icon:"trophy",c:"var(--reports)",d:"Test procedures, results and outcomes."},
+  guide:{name:"Guide",icon:"guide",c:"var(--appeals)",d:"Guides."}
+};
+const T = [
+/* Support Tickets: Appeals */
+{cat:"support",grp:"Appeals",title:"[PUBLIC] Appeal Accepted",desc:"Tell the user their appeal was accepted.",tags:"appeal accepted, accepted appeal, approved, unban, unbanned, unmute, unmuted, appeal granted, player wants to get unbanned, ban appeal, mute appeal, public message",
+body:H("Thank you for appealing. Your appeal has been accepted.")},
+{cat:"support",grp:"Appeals",note:1,title:"[PRIVATE] Appeal Accepted - Internal Note",desc:"Record an accepted appeal.",tags:"appeal accepted, accepted appeal, internal note, private note, punishment link, decision, ign, handled by, record appeal",
+body:["Appeal accepted.","IGN: IGN","Punishment: #punishmentlink","Decision: Appeal accepted","Handled by: [Staff]"].join("\n")},
+{cat:"support",grp:"Appeals",title:"[PUBLIC] Appeal Denied",desc:"Tell the user their appeal was denied.",tags:"appeal denied, denied appeal, rejected appeal, declined, not unbanned, punishment stands, ban upheld, ban appeal, mute appeal, public message",
+body:H("Thank you for appealing. After reviewing your case, your appeal has been denied. We are not able to share further information about the punishment.")},
+{cat:"support",grp:"Appeals",note:1,title:"[PRIVATE] Appeal Denied - Internal Note",desc:"Record a denied appeal.",tags:"appeal denied, denied appeal, rejected appeal, internal note, private note, punishment link, decision, ign, handled by, record appeal",
+body:["Appeal denied.","IGN: IGN","Punishment: #punishmentlink","Decision: Appeal denied","Handled by: [Staff]"].join("\n")},
+{cat:"support",grp:"Appeals",title:"[PUBLIC] Not Enough Evidence",desc:"Ask the user for more evidence to support their appeal.",tags:"not enough evidence, insufficient evidence, no proof, missing evidence, need more evidence, additional evidence, appeal evidence, screenshot, video, public message",
+body:H("Thank you for your appeal. We do not have enough evidence to review it properly. Please reply to this ticket with any additional evidence that supports your appeal, such as screenshots or a video.")},
+/* Support Tickets: Reports */
+{cat:"support",grp:"Reports",title:"[PUBLIC] Report Resolved",desc:"Tell the reporter their report has been handled.",tags:"report resolved, report handled, resolved, handled, report accepted, actioned, punished, report update, public message",
+body:H("Thank you for your report. We have reviewed it and it has been resolved. We are not able to share information about punishments.")},
+{cat:"support",grp:"Reports",title:"[PUBLIC] Request Recordings",desc:"Ask the reporter for a recording of the incident.",tags:"asking for recordings, request recordings, need a recording, recording, video, clip, proof, evidence, replay mod, flashback, rewind, missing video, public message",
+body:H("Thank you for your report. To review it, we need a recording of the incident. Please reply to this ticket with a video that clearly shows it. Footage recorded with replay, Flashback or Rewind mods is not accepted.")},
+/* Support Tickets: General Support */
+{cat:"support",grp:"General Support",title:"[PUBLIC] Escalated to Higher-Ups",desc:"Tell the user the ticket was passed to higher-ups.",tags:"escalated, escalation, higher-ups, higher ups, higher staff, management, admin, forwarded ticket, ticket needs management, ticket moved to higher staff, public message",
+body:H("Thank you for your patience. Your ticket has been escalated to our higher-ups for review. They will reply in this ticket, and there is no need to open another one.")},
+{cat:"support",grp:"General Support",note:1,title:"[PRIVATE] Escalated to Higher-Ups - Internal Note",desc:"Record why and by whom the ticket was escalated.",tags:"escalated, escalation, higher-ups, higher staff, reason for escalation, escalation note, internal note, private note, forwarded ticket",
+body:["Ticket escalated to higher-ups.","Reason: [Reason]","Escalated by: [Staff]"].join("\n")},
+{cat:"support",grp:"General Support",title:"[PUBLIC] Tier Transfer",desc:"Reply to a tier transfer request.",tags:"tier transfer, transfer tier, tier move, move tier, tier request, transfer, tier, public message",
+body:H("Thank you for contacting us regarding your tier transfer request. Please note that tier transfer requests must be submitted through the Support Hub Discord server.\n\nYou can access the Support Hub and submit your request using the following link:\n\n[Support Hub – Submit a Request](https://discord.com/channels/1317971630886227998/1317971630940622938/1563716382191788107)")},
+{cat:"support",grp:"General Support",title:"[PUBLIC] Force Test Needed",desc:"Tell the user a force test is needed.",tags:"force test, force test needed, forced test, test required, retest, testing required, test needed, tier test, public message",
+body:"Hello @user,\nThank you for your patience. After reviewing your ticket, we have determined that a force test is required. A staff member will reply to this ticket with the next steps.\nIn the meantime, please provide the following information:\n\n* Discord ID\n* IGN (In-Game Name)\n* Name of the tester\n\nHow to find your Discord ID:\n\n1. Open your Discord settings.\n2. Enable Developer Mode under Advanced settings.\n3. Right-click your profile and select Copy User ID.\n\nPlease provide the requested information so we can proceed with the force test."},
+/* Testing Tickets: Testing Procedures */
+{cat:"testing",grp:"Testing Procedures",title:"[PUBLIC] Bridge With",desc:"Bridge the user with a tester. Ticket link is optional.",tags:"bridge with, bridge, bridging, testing procedure, test procedure, who to bridge with, public message",
+body:"Bridge With:{LINK}"},
+{cat:"testing",grp:"Testing Procedures",title:"[PUBLIC] HT3 Tester Unavailable",desc:"Tell the user all HT3 testers are unavailable and offer LT3.",tags:"ht3 tester unavailable, tester unavailable, no testers, no ht3 testers, ht3 testers unavailable, wait, waiting, patient, lt3 instead, take lt3, high volume, do not ping, testing procedure, public message",
+body:"Hello @user\n\n- You will need to wait for now, as all HT3 testers on our list are currently unavailable. Please be as patient as possible, as this may take weeks or even months.\n- Please do not ping multiple staff members, since we are dealing with a high volume of tickets.\n- You do have the option to take LT3 instead. If you choose to do so, you may ping me or any tester to proceed with LT3."},
+{cat:"testing",grp:"Testing Procedures",title:"[PUBLIC] Tester Assigned",desc:"Tell the user who their tier tester is and how to arrange the test.",tags:"tester assigned, assigned tester, your tester, tier tester, ping tester, agree date and time, record the test, mcpvp.club, server disagreement, helper, mod, testing procedure, public message",
+body:"Hello, @user\n\n* Your **Tier** tester is the @tester. You may ping them at any time, but please do so reasonably.\n* You must agree on a date and time with the **Tier** tester.\n* It is strongly suggested to record the full test in case something does not go to plan.\n* If both of you disagree with a server, then you both are forced to test in `mcpvp.club`.\n* If there are any issues, please ping a Helper or Mod to assist. Please do not escalate the situation further."},
+{cat:"testing",grp:"Testing Procedures",title:"[PUBLIC] Testing Room Welcome",desc:"Welcome message when the test starts, with the testing server and ground rules.",tags:"testing room welcome, welcome, testing room, test start, first to 6, server, eval, pass eval, questions, disagreements, 5 minutes, testing procedure, public message",
+body:"## Hello 👋 - **{SRV}**\n- Welcome to the testing room, we will be testing in **`{SRV}`**.\n- We will do a **first to 3**, and after that i will determined your rank base on the score and playstyle.\n- if you win by (**`0-3`** or **`1-3`**) you get to pass eval, where you can test for **`HT3`**.\n- ❓ Any **questions **or **disagreements **please state them now before we start.\n-# You have 5 minutes to reply, read and understand"},
+/* Testing Tickets: Testing Results */
+{cat:"testing",grp:"Testing Results",note:1,title:"[PRIVATE] HT3 Result",desc:"High Tier 3 result with the HT3 fight section.",tags:"ht3, high tier 3, tier 3, result, test result, promoted, failed, passed evaluation, fights, testing result, ign, private note",
+body:["@user - IGN - Promoted/Failed **High Tier 3**","","*Passed Evaluation*","","### __HT3 Fights:__","> Won/Lost x-x vs. IGN"].join("\n")},
+{cat:"testing",grp:"Testing Results",note:1,title:"[PRIVATE] LT2 Result",desc:"Low Tier 2 result with the LT2 and HT3 fight sections.",tags:"lt2, low tier 2, tier 2, result, test result, promoted, failed, fights, ht3 fights, highresults, testing result, ign, private note",
+body:["@user - IGN - Promoted/Failed **Low Tier 2**","","### __LT2 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","### __HT3 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","-# @highresults"].join("\n")},
+{cat:"testing",grp:"Testing Results",note:1,title:"[PRIVATE] HT2 Result",desc:"High Tier 2 result with the HT2 and LT2 fight sections.",tags:"ht2, high tier 2, tier 2, result, test result, promoted, failed, fights, lt2 fights, highresults, testing result, ign, private note",
+body:["@user - IGN - Promoted/Failed **High Tier 2**","","### __HT2 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","### __LT2 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","-# @highresults"].join("\n")},
+{cat:"testing",grp:"Testing Results",note:1,title:"[PRIVATE] LT1 Result",desc:"Low Tier 1 result with the LT1, HT2 and LT2 fight sections.",tags:"lt1, low tier 1, tier 1, result, test result, promoted, failed, fights, ht2 fights, lt2 fights, highresults, testing result, ign, private note",
+body:["@user - IGN - Promoted/Failed **Low Tier 1**","","### __LT1 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","### __HT2 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","### __LT2 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","-# @highresults"].join("\n")},
+{cat:"testing",grp:"Testing Results",note:1,title:"[PRIVATE] HT1 Result",desc:"High Tier 1 result with all four fight sections and optional circumstances.",tags:"ht1, high tier 1, tier 1, result, test result, promoted, failed, fights, additional information, dq, disqualified, deadline reached, ff, forfeit, demoted, punishment link, extra ht3, highresults, testing result, ign, private note",
+body:["@user - IGN - Promoted/Failed **High Tier 1**","","### Additional Information That May Be Required","","- Fought an additional HT3 due to the lack of available LT2s.","- Test DQ'ed due to #punishmentlink.","- (DQ at x-x)","- (Deadline reached at x-x)","- (x-x prior to FF)","- *Demoted to **Tier***","","### __HT1 Fights:__","> Won/Lost x-x vs. IGN","","### __LT1 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","### __HT2 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","### __LT2 Fights:__","> Won/Lost x-x vs. IGN","> Won/Lost x-x vs. IGN","","-# @highresults"].join("\n")},
+/* Testing Tickets: Testing Outcomes */
+{cat:"testing",grp:"Testing Outcomes",note:1,title:"[PRIVATE] Player Retired",desc:"Record a player retiring at a tier.",tags:"player retired, retired, retirement, retire, outcome, tier, testing outcome, ign, private note",
+body:"@user - IGN - Retired at **Tier**"},
+{cat:"testing",grp:"Testing Outcomes",note:1,title:"[PRIVATE] Player Demoted",desc:"Record a demotion after exceeding the strike limit.",tags:"player demoted, demoted, demotion, strike limit, exceeded strike limit, strikes, outcome, tier, testing outcome, ign, private note",
+body:"@user - IGN - Demoted to **Tier**\n-# Exceeded strike limit."}
+];
+const TIERS=["LT5","HT5","LT4","HT4","LT3","HT3","LT2","HT2","LT1","HT1"];
+const OPTS=[
+{k:"ht3",label:"Fought an additional HT3 (not enough LT2s)",line:"- Fought an additional HT3 due to the lack of available LT2s."},
+{k:"dqlink",label:"Test DQ'ed (punishment link)",line:"- Test DQ'ed due to {V:dqlink}.",type:"text",ph:"#punishmentlink"},
+{k:"dq",label:"DQ at",line:"- (DQ at {V:dq})",type:"score"},
+{k:"deadline",label:"Deadline reached at",line:"- (Deadline reached at {V:deadline})",type:"score"},
+{k:"ff",label:"Score prior to FF",line:"- ({V:ff} prior to FF)",type:"score"},
+{k:"demote",label:"Demoted to another tier",line:"- *Demoted to **{TIER}***",type:"tier"}
+];
+const S={}, st=t=>S[t.id]||(S[t.id]={});
+const normSc=s=>(s||"").trim().replace(/\s*[-–—−]\s*/,"-"), okSc=s=>/^\d{1,2}-\d{1,2}$/.test(normSc(s));
+T.forEach(t=>{
+  t.vis=/^\[PRIVATE\]/.test(t.title)?"private":"public";
+  t.title=t.title.replace(/^\[(PUBLIC|PRIVATE)\]\s*/,"");
+  let sec=null;const cnt={};t.fights=[];
+  t.body=t.body.split("\n").map(l=>{
+    const m=l.match(/^### __(\w+) Fights:__$/);if(m){sec=m[1];return l}
+    if(l==="> Won/Lost x-x vs. IGN"){const n=cnt[sec]=(cnt[sec]===undefined?0:cnt[sec]+1);t.fights.push([sec,n]);return `> {W:${sec}:${n}} {S:${sec}:${n}} vs. {O:${sec}:${n}}`}
+    return l}).join("\n")
+    .replace(/^@user - IGN - /,"@user - {IGN} - ").replace(/^(@user - \{IGN\} - )Promoted\/Failed(?= \*\*High Tier 3)/,t.title==="HT3 Result"?"$1{OUT}":"$&").replace(/\*\*Tier\*\*/g,"**{TIER}**")
+    .replace(/### Additional Information[\s\S]*?(?=\n\n### __HT1)/,"{OPTS}");
+  if(t.grp==="Testing Results")t.body=t.body.replace(/\n\n(?=###|\{OPTS\})/g,"\n").replace(/(###[^\n]*)\n\n/g,"$1\n").replace("\n\n*Passed Evaluation*","\n*Passed Evaluation*");
+  t.opts=t.body.includes("{OPTS}");t.dyn=t.body.includes("{IGN}");t.hasTier=t.opts||t.body.includes("{TIER}");
+});
+T.forEach((t,i)=>{t.id=i;t.l={title:t.title.toLowerCase(),tags:t.tags.toLowerCase(),desc:t.desc.toLowerCase(),
+ body:t.body.toLowerCase().replace(/\{w:[^}]*\}/g,"won/lost").replace(/\{s:[^}]*\}/g,"x-x").replace(/\{o:[^}]*\}|\{ign\}/g,"ign").replace(/\{tier\}/g,"tier").replace("{opts}","additional information dq deadline ff demoted")+(t.note?" internal note staff note":"")}});
+
+const STOP=new Set("a an the to of for and or in on at is are was were be been it its this that they their them he she his her my me i you your we our with from by as about why who what how do does did has have had can could would should will not no someone somebody player players says say said wants want get got keeps keep".split(" "));
+const GROUPS=[["ban","banned","unban","unbanned","unbanning"],["mute","muted","unmute","unmuted"],["hack","hacks","hacker","hacking","hacked","cheat","cheats","cheating","cheater"],["proof","evidence","screenshot","screenshots","video","footage","clip"],["crop","cropped"],["escalate","escalated","escalation","management"],["forward","forwarded"],["info","information","details"],["takeover","taken","claim","claimed"],["bug","glitch","error","malfunction"]];
+const SYN={};GROUPS.forEach(g=>g.forEach(w=>SYN[w]=g.filter(x=>x!==w)));
+function tokens(full){
+  let words=full.split(/[^a-z0-9+#@]+/).filter(w=>w.length>1);
+  const kept=words.filter(w=>!STOP.has(w));return kept.length?kept:words;
+}
+function search(q){
+  const full=q.replace(/\s+/g," ").trim();
+  const words=tokens(full);
+  const W={title:10,tags:6,desc:3,body:1};
+  const res=pool().filter(t=>scope==="all"||cat==="all"||t.cat===cat).map(t=>{
+    let s=0,miss=0;
+    for(const w of words){
+      const syn=SYN[w]||[];let b=0;
+      for(const f in W){if(t.l[f].includes(w))b=Math.max(b,W[f]*2);else if(syn.some(x=>t.l[f].includes(x)))b=Math.max(b,W[f])}
+      if(b)s+=b;else miss++;
+    }
+    let ph=0;
+    if(full.length>2){if(t.l.title.includes(full))ph+=25;if(t.l.tags.includes(full))ph+=15;if(t.l.desc.includes(full))ph+=6;if(t.l.body.includes(full))ph+=2}
+    return{t,s:s+ph,miss,ph};
+  });
+  let hit=res.filter(r=>r.miss===0||r.ph>0),fb=false;
+  if(!hit.length){hit=res.filter(r=>r.s>0&&words.length>1&&r.miss<=Math.floor(words.length/2));fb=hit.length>0}
+  hit.sort((a,b)=>b.s-a.s||a.t.id-b.t.id);
+  return{items:hit.map(r=>r.t),fb};
+}
+const vals={}, open=new Set();
+let cat="all", query="";
+const $=s=>document.querySelector(s), list=$("#list");
+const esc=s=>s.replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const PH=/(@user|@tester|\[[^\]]+\](?!\())/g;
+const label=k=>k==="@user"?"User":k==="@tester"?"Tester":k.slice(1,-1);
+const ic=(n,x="")=>`<svg class="i ${x}"><use href="#${n}"/></svg>`;
+
+let HL=null,TERMS=[],AUTO=false,mode="public",scope="all";
+const pool=()=>T.filter(t=>mode==="internal"?!!t.note:!t.note);
+const GRPS={"Appeals":"Appeals","Reports":"Reports","General Support":"General Support","Testing Procedures":"Procedures","Testing Results":"Results","Testing Outcomes":"Outcomes"};
+const MODES={public:{label:"Public Messages",one:"public messages",hint:"Messages visible to the ticket user"},internal:{label:"Private Notes",one:"private notes",hint:"Internal staff notes. Not visible to the ticket user"}};
+const hl=x=>HL?x.split(HL).map((p,i)=>i%2?`<mark>${esc(p)}</mark>`:esc(p)).join(""):esc(x);
+function kwHTML(t){
+  if(!TERMS.length)return "";
+  const full=query.trim().toLowerCase().replace(/\s+/g," ");
+  const hits=t.tags.split(", ").map(k=>{const l=k.toLowerCase();
+    const lit=TERMS.filter(w=>l.includes(w)).length, syn=TERMS.filter(w=>(SYN[w]||[]).some(x=>l.includes(x))).length;
+    return{k,sc:(l.includes(full)?100:0)+lit*10+syn}}).filter(h=>h.sc>0).sort((a,b)=>b.sc-a.sc).slice(0,4);
+  return hits.length?`<div class="kws">${hits.map(h=>`<span class="kw">${hl(h.k)}</span>`).join("")}</div>`:"";
+}
+function nav(){
+  const el=$("#nav");
+  document.body.dataset.theme=(!query||scope==="cat")?cat:"all";
+  if(!el.children.length)el.innerHTML=Object.entries(CATS).map(([k,c])=>`<button class="nav" data-k="${k}" style="--c:${c.c}">${ic(c.icon)}<span>${c.name}</span><span class="n"></span></button>`).join("");
+  el.querySelectorAll(".nav").forEach(b=>{const k=b.dataset.k;
+    b.classList.toggle("on",(!query||scope==="cat")&&cat===k);
+    b.querySelector(".n").textContent=k==="guide"?4:pool().filter(t=>k==="all"||t.cat===k).length});
+}
+function go(){nav();clearTimeout(go.t);list.classList.add("out");go.t=setTimeout(()=>{list.classList.remove("out");render(true)},130)}
+const TOK=/(\[[^\]]+\]\([^)\s]+\)|@user|@tester|\[[^\]]+\]|\{[A-Z]+(?::[^}]+)?\})/;
+function tok(t,s,p){
+  let v,d;
+  const lk=p.match(/^\[[^\]]+\]\(([^)\s]+)\)$/);
+  if(lk)return{x:p,link:lk[1]};
+  if(p[0]==="@"||p[0]==="["){v=vals[p];d=p;if(p[0]==="@"&&v&&v[0]!=="@")v="@"+v}
+  else{const[a,b,c]=p.slice(1,-1).split(":");
+    if(a==="IGN"){v=vals[p];d="IGN"}
+    else if(a==="LINK"){const l=(s.link||"").trim();return l?{x:l,f:true,k:p,pre:" ",href:/^https?:\/\//i.test(l)?l:""}:{x:""}}
+    else if(a==="SRV"){v=s.srv;d="Server"}
+    else if(a==="TIER"){v=s.tier;d="Tier"}
+    else if(a==="OUT"){const w=s["w:HT3:0"];v=w==="Won"?"Promoted":w==="Lost"?"Failed":"";d="Promoted/Failed"}
+    else if(a==="W"){v=s[`w:${b}:${c}`];d="Won/Lost"}
+    else if(a==="S"){v=normSc(s[`s:${b}:${c}`]);if(!okSc(v))v="";d="x-x"}
+    else if(a==="O"){v=s[`o:${b}:${c}`];d="IGN"}
+    else if(a==="V"){const o=OPTS.find(x=>x.k===b);v=s["v:"+b];if(o.type==="score"){v=normSc(v);if(!okSc(v))v=""}d=o.type==="text"?o.ph:"x-x"}}
+  return{x:v||d,f:!!v,k:p};
+}
+function expand(t){
+  const s=st(t),L=t.body.split("\n"),o=[];
+  for(let i=0;i<L.length;i++){
+    if(L[i]==="{OPTS}"){const on=OPTS.filter(x=>s["o:"+x.k]);
+      if(!on.length){if(L[i+1]==="")i++;continue}
+      o.push("### Additional Information That May Be Required",...on.map(x=>x.line));continue}
+    o.push(L[i]);
+  }
+  return o.join("\n").split(TOK).map((p,i)=>i%2?tok(t,s,p):{x:p});
+}
+const aTag=(u,x)=>/^https?:\/\//i.test(u)?`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(x)}</a>`:esc(x);
+function msgHTML(t){return expand(t).map(p=>p.link?aTag(p.link,p.x):p.k?(p.pre||"")+`<span class="ph ${p.f?"f":""}">${p.href?aTag(p.href,p.x):esc(p.x)}</span>`:hl(p.x)).join("")}
+function msgText(t){return expand(t).map(p=>(p.pre||"")+p.x).join("")}
+function leftCount(t){return new Set(expand(t).filter(p=>p.k&&!p.f).map(p=>p.k)).size}
+const tierBox=(t,s,lab)=>{const b=`<span class="cb"><input class="cbi" data-t="${t.id}" role="combobox" aria-label="Tier" aria-expanded="false" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search tier…" value="${esc(s.tier||"")}">${ic("chev","cbc")}</span>`;return lab?`<label>${lab}${b}</label>`:b};
+function fieldsHTML(t){
+  const s=st(t);
+  let h=keys(t).map(k=>`<label>${esc(label(k))}<input data-k="${esc(k)}" value="${esc(vals[k]||"")}" placeholder="${esc(k)}"></label>`).join("");
+  if(t.dyn)h+=`<label>Player IGN<input data-k="{IGN}" value="${esc(vals["{IGN}"]||"")}" placeholder="Player IGN" autocomplete="off" spellcheck="false"></label>`;
+  if(t.body.includes("{SRV}"))h+=`<label>Server<input data-d="srv" value="${esc(s.srv||"")}" placeholder="Server" autocomplete="off" spellcheck="false"></label>`;
+  if(t.body.includes("{LINK}"))h+=`<label>Ticket Link (optional)<input data-d="link" value="${esc(s.link||"")}" placeholder="https://discord.com/channels/…" autocomplete="off" spellcheck="false"></label>`;
+  if(t.hasTier&&!t.opts)h+=tierBox(t,s,"Tier");
+  h+=[...new Set(t.fights.map(f=>f[0]))].map(sec=>`<div class="fg"><div class="fgh">${sec} Fights</div>${t.fights.filter(f=>f[0]===sec).map(([,n])=>{
+    const w=s[`w:${sec}:${n}`],sc=s[`s:${sec}:${n}`]||"";
+    return `<div class="fr"><span class="fn">${n+1}</span><span class="seg" role="group" aria-label="${sec} fight ${n+1} result" data-d="w:${sec}:${n}"><button type="button" data-v="Won" class="${w==="Won"?"on":""}" aria-pressed="${w==="Won"}">Won</button><button type="button" data-v="Lost" class="${w==="Lost"?"on lost":""}" aria-pressed="${w==="Lost"}">Lost</button></span><input class="sc${sc&&!okSc(sc)?" bad":""}" data-d="s:${sec}:${n}" value="${esc(sc)}" placeholder="x-x" maxlength="5" autocomplete="off" aria-label="${sec} fight ${n+1} score"><input data-d="o:${sec}:${n}" value="${esc(s[`o:${sec}:${n}`]||"")}" placeholder="Opponent IGN" autocomplete="off" spellcheck="false" aria-label="${sec} fight ${n+1} opponent IGN"></div>`}).join("")}</div>`).join("");
+  if(t.opts)h+=`<div class="fg"><div class="fgh">Additional information (optional)</div>${OPTS.map(o=>{
+    const v=s["v:"+o.k]||"";let c="";
+    if(o.type==="score")c=`<input class="sc${v&&!okSc(v)?" bad":""}" data-d="v:${o.k}" value="${esc(v)}" placeholder="x-x" maxlength="5" autocomplete="off" aria-label="${o.label}">`;
+    else if(o.type==="text")c=`<input data-d="v:${o.k}" value="${esc(v)}" placeholder="${o.ph}" autocomplete="off" aria-label="${o.label}">`;
+    else if(o.type==="tier")c=tierBox(t,s,"");
+    return `<div class="opt"><label class="ck"><input type="checkbox" data-o="${o.k}" ${s["o:"+o.k]?"checked":""}><span>${o.label}</span></label>${c}</div>`}).join("")}</div>`;
+  return h;
+}
+function dynInput(i){
+  const card=i.closest(".card"),t=T[card.dataset.id],s=st(t);
+  if(i.dataset.o){s["o:"+i.dataset.o]=i.checked}
+  else if(i.dataset.d){
+    const key=i.dataset.d,val=i.value.trim();s[key]=val;
+    if(key.startsWith("s:")||(key[0]==="v"&&OPTS.find(o=>o.k===key.slice(2)).type==="score"))i.classList.toggle("bad",!!val&&!okSc(val));
+    if(key[0]==="v"&&val){const k=key.slice(2);s["o:"+k]=true;const cb=card.querySelector(`[data-o="${k}"]`);if(cb)cb.checked=true}
+  }
+  else if(i.classList.contains("cbi")){cbShow(i,true);return}
+  refresh();
+}
+function keys(t){return [...new Set(t.body.match(PH))]}
+function card(t){
+  const c=CATS[t.cat], o=open.has(t.id)||AUTO;
+  return `<article class="card ${o?"open":""} ${t.note?"note":""}" data-id="${t.id}" style="--c:${c.c}">
+  <div class="row">
+    <button class="tog" aria-expanded="${o}">
+      <span class="dot">${ic(c.icon)}</span>
+      <span class="tt"><h3>${hl(t.title)}<span class="vt ${t.vis}">${t.vis==="private"?"Private":"Public"}</span><span class="badge">${c.name}</span>${t.grp?`<span class="badge g">${GRPS[t.grp]}</span>`:""}</h3><p>${hl(t.desc)}</p>${kwHTML(t)}</span>
+      ${ic("chev","chev")}
+    </button>
+    <button class="copy" aria-label="Copy ${esc(t.title)}">${ic("copy")}<span>Copy</span></button>
+  </div>
+  <div class="body">
+    <div class="fields">${fieldsHTML(t)}</div>
+    ${t.note?`<div class="warn">Private note. Not visible to the ticket user.</div>`:""}<pre class="msg" data-id="${t.id}">${msgHTML(t)}</pre>
+  </div></article>`;
+}
+function listHTML(items,q){
+  const heads=!q;let prev,out="";
+  if(heads)items=[...items.filter(t=>!t.grp),...items.filter(t=>t.grp)];
+  items.forEach(t=>{if(heads&&t.grp&&t.grp!==prev)out+=`<div class="grp">${t.grp}</div>`;prev=t.grp;out+=card(t)});
+  return out;
+}
+function render(animate){cbClose();document.body.classList.toggle("guide-on",cat==="guide"&&!query.trim());
+  const q=query.trim().toLowerCase();let items,fb=false;
+  if(q){const r=search(q);items=r.items;fb=r.fb}else items=pool().filter(t=>cat==="all"||t.cat===cat);
+  TERMS=q?tokens(q):[];
+  HL=TERMS.length?new RegExp("("+[...new Set(TERMS)].sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","gi"):null;
+  AUTO=!!q&&items.length<=4;
+  const c=CATS[cat];
+  const inCat=scope==="cat"&&cat!=="all";$("#ttl").textContent=q?(inCat?"Search results in "+c.name:"Search results"):c.name;
+  $("#sub").textContent=q?(fb?"No exact match. Showing the closest templates.":`${items.length} ${items.length===1?"result":"results"} in ${MODES[mode].label} ${inCat?"in "+c.name:"across all categories"}, best matches first`):cat==="guide"?"Staff handbook":`${items.length} ${MODES[mode].one}`;
+  list.innerHTML=!T.length?`<div class="empty"><b>No templates yet</b></div>`:items.length?listHTML(items,q):q?`<div class="empty"><b>No ${MODES[mode].label.toLowerCase()} match “${esc(query)}”${inCat?" in "+c.name:""}</b>Try a shorter keyword, switch to ${mode==="public"?"Internal":"Public"} Notes${inCat?" or search all categories":""}. If nothing fits, this situation may not have a template yet.</div>`:cat==="guide"?guideHTML():`<div class="empty"><b>No ${MODES[mode].one} for ${c.name} yet</b>Switch to ${mode==="public"?"Internal":"Public"} Notes or pick another category.</div>`;
+  if(animate){[...list.children].slice(0,10).forEach((c,i)=>c.style.setProperty("--i",i));const hd=$(".head");hd.classList.remove("pop");list.classList.remove("swap");void list.offsetWidth;list.classList.add("swap");hd.classList.add("pop")}
+  nav();
+}
+function refresh(){
+  document.querySelectorAll(".msg").forEach(m=>m.innerHTML=msgHTML(T[m.dataset.id]));
+}
+function toast(s){const t=$("#toast");$("#tmsg").textContent=s;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),2200)}
+async function copyText(s){
+  try{await navigator.clipboard.writeText(s)}catch(e){
+    const a=document.createElement("textarea");a.value=s;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();
+    try{document.execCommand("copy")}catch(_){}a.remove();
+  }
+}
+$("#nav").addEventListener("click",e=>{
+  const b=e.target.closest(".nav");if(!b)return;
+  cat=b.dataset.k;if(scope!=="cat"){query="";$("#q").value="";$("#sb").classList.remove("has")}go();
+});
+$("#q").addEventListener("input",e=>{
+  query=e.target.value;$("#sb").classList.toggle("has",!!query);render(false);
+});
+let sAnchor=0,sOpenAt=0;
+function openSearch(f){
+  const sb=$("#sb");
+  if(!sb.classList.contains("open")){sb.classList.add("open");$("#sbtn").setAttribute("aria-expanded","true");sAnchor=scrollY;sOpenAt=performance.now()}
+  if(f!==false)$("#q").focus({preventScroll:true});
+}
+function closeSearch(){
+  const sb=$("#sb");sb.classList.remove("open");$("#sbtn").setAttribute("aria-expanded","false");$("#q").blur();
+}
+let sRaf=0,uAt=0;
+const userScroll=()=>{uAt=performance.now()};
+addEventListener("wheel",userScroll,{passive:true});addEventListener("touchmove",userScroll,{passive:true});
+addEventListener("keydown",e=>{if(!/INPUT|TEXTAREA/.test(e.target.tagName)&&["ArrowDown","ArrowUp","PageDown","PageUp","Home","End"," "].includes(e.key))userScroll()});
+function syncSearch(){
+  sRaf=0;const y=scrollY,isOpen=$("#sb").classList.contains("open");
+  if(y<=10){if(!isOpen)openSearch(false);sAnchor=y;return}
+  if(isOpen&&(document.activeElement!==$("#q")||performance.now()-uAt<400)&&performance.now()-sOpenAt>500&&Math.abs(y-sAnchor)>=24)closeSearch();
+}
+addEventListener("scroll",()=>{if(!sRaf)sRaf=requestAnimationFrame(syncSearch)},{passive:true});
+$("#sbtn").addEventListener("click",()=>openSearch());
+$("#sb").addEventListener("click",e=>{if(!e.target.closest(".clear"))openSearch()});
+$("#clr").addEventListener("click",()=>{
+  if(query){query="";$("#q").value="";$("#sb").classList.remove("has");render(true);$("#q").focus()}
+  else closeSearch();
+});
+function toggleCard(card,id){
+  const body=card.querySelector(".body"),opening=!card.classList.contains("open");
+  const h0=body.offsetHeight;
+  if(card._a){card._a.cancel();card._a=null;card.classList.remove("will-close")}
+  card.querySelector(".tog").setAttribute("aria-expanded",opening);
+  opening?open.add(id):open.delete(id);
+  const run=(a,b,done)=>{
+    if(a===b||!body.animate||matchMedia("(prefers-reduced-motion:reduce)").matches){done&&done();return}
+    body.style.overflow="hidden";
+    const an=card._a=body.animate([{height:a+"px"},{height:b+"px"}],{duration:440,easing:"cubic-bezier(.2,.8,.2,1)"});
+    an.onfinish=()=>{body.style.overflow="";card._a=null;done&&done()};
+    an.oncancel=()=>{body.style.overflow=""};
+  };
+  if(opening){card.classList.add("open");run(h0,body.offsetHeight)}
+  else{card.classList.remove("open");const h1=body.offsetHeight;card.classList.add("open","will-close");run(h0,h1,()=>card.classList.remove("open","will-close"))}
+}
+list.addEventListener("click",async e=>{
+  const card=e.target.closest(".card");if(!card)return;
+  const t=T[card.dataset.id];
+  const cbw=e.target.closest(".cb");if(cbw){const i=cbw.querySelector(".cbi");if(document.activeElement!==i)i.focus();else if(pop.hidden)cbShow(i,false);return}
+  const sg=e.target.closest(".seg button");
+  if(sg){const seg=sg.parentNode,key=seg.dataset.d,s=st(t),on=!sg.classList.contains("on");
+    seg.querySelectorAll("button").forEach(b=>{b.classList.remove("on","lost");b.setAttribute("aria-pressed","false")});
+    if(on){sg.classList.add("on");if(sg.dataset.v==="Lost")sg.classList.add("lost");sg.setAttribute("aria-pressed","true");s[key]=sg.dataset.v}else delete s[key];
+    refresh();return}
+  if(e.target.closest(".copy")){
+    const btn=e.target.closest(".copy"), left=leftCount(t);
+    await copyText(msgText(t));
+    btn.classList.add("done");btn.innerHTML=ic("check")+"<span>Copied</span>";
+    setTimeout(()=>{btn.classList.remove("done");btn.innerHTML=ic("copy")+"<span>Copy</span>"},1800);
+    toast(left?`Copied. ${left} placeholder${left>1?"s":""} still to fill in`:"Copied to clipboard");
+    return;
+  }
+  if(e.target.closest(".tog"))toggleCard(card,t.id);
+});
+list.addEventListener("input",e=>{
+  const i=e.target.closest(".fields input");if(!i)return;
+  if(!i.dataset.k){dynInput(i);return}
+  vals[i.dataset.k]=i.value.trim();
+  document.querySelectorAll(".fields input").forEach(x=>{if(x!==i&&x.dataset.k===i.dataset.k)x.value=i.value});
+  refresh();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="/"&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();openSearch()}
+  if(e.key==="Escape"&&document.activeElement===$("#q")){$("#clr").click()}
+});
+function setMode(m){
+  if(m===mode)return;
+  mode=m;const el=$("#mode");el.dataset.mode=m;
+  el.querySelectorAll("button").forEach(b=>b.setAttribute("aria-checked",b.dataset.m===m));
+  $("#mhint").textContent=MODES[m].hint;go();
+}
+$("#mode").addEventListener("click",e=>{const b=e.target.closest("button");if(b)setMode(b.dataset.m)});
+$("#mode").addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();const m=mode==="public"?"internal":"public";setMode(m);$("#mode").querySelector(`[data-m="${m}"]`).focus()}
+});
+function setScope(m){
+  if(m===scope)return;
+  scope=m;const el=$("#scope");el.dataset.scope=m;
+  el.querySelectorAll("button").forEach(b=>b.setAttribute("aria-checked",b.dataset.s===m));
+  go();
+}
+$("#scope").addEventListener("click",e=>{const b=e.target.closest("button");if(b)setScope(b.dataset.s)});
+$("#scope").addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();const m=scope==="all"?"cat":"all";setScope(m);$("#scope").querySelector(`[data-s="${m}"]`).focus()}
+});
+let raf=0;
+list.addEventListener("pointermove",e=>{
+  if(raf)return;const c=e.target.closest(".card");if(!c)return;
+  raf=requestAnimationFrame(()=>{raf=0;const r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px")});
+});
+document.addEventListener("pointerdown",e=>{
+  const b=e.target.closest(".copy,.mode button,.tog,.clear,.gtab");if(!b)return;
+  const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*2,x=document.createElement("span");
+  x.className="rip";x.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;
+  b.appendChild(x);x.addEventListener("animationend",()=>x.remove());
+});
+(function(){
+  let t,on=0;
+  addEventListener("scroll",()=>{if(!on){on=1;document.body.classList.add("scrolling")}clearTimeout(t);t=setTimeout(()=>{on=0;document.body.classList.remove("scrolling")},140)},{passive:true});
+})();
+(function(){
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  const orbs=[...document.querySelectorAll(".orbs i")],A=[340,-280,440,-200,260],B=[90,-120,70,110,-80];
+  let tgt=0,cur=0,run=0;
+  const apply=()=>orbs.forEach((o,k)=>{o.style.translate=`${(B[k]*Math.sin(cur/900+k)).toFixed(1)}px ${(A[k]*Math.tanh(cur/2500)).toFixed(1)}px`});
+  const tick=()=>{cur+=(tgt-cur)*.07;apply();run=Math.abs(tgt-cur)>.4?requestAnimationFrame(tick):0};
+  addEventListener("scroll",()=>{tgt=scrollY;if(!run)run=requestAnimationFrame(tick)},{passive:true});
+  tgt=cur=scrollY;apply();
+})();
+const pop=$("#cbpop");let cbI=null,cbL=[],cbA=0;
+function cbPlace(){if(!cbI||pop.hidden)return;const r=cbI.getBoundingClientRect(),h=Math.min(pop.scrollHeight,240),below=innerHeight-r.bottom,up=below<h+16&&r.top>below;
+  pop.style.left=r.left+"px";pop.style.width=Math.max(r.width,120)+"px";pop.style.top=up?"auto":(r.bottom+6)+"px";pop.style.bottom=up?(innerHeight-r.top+6)+"px":"auto"}
+function cbMark(){[...pop.querySelectorAll(".o[data-v]")].forEach((o,n)=>{o.classList.toggle("act",n===cbA);if(n===cbA)o.scrollIntoView({block:"nearest"})})}
+function cbShow(i,typing){
+  cbI=i;const q=typing?i.value.trim().toLowerCase():"",sel=st(T[i.dataset.t]).tier;
+  cbL=TIERS.filter(x=>x.toLowerCase().includes(q));cbA=typing?0:Math.max(0,cbL.indexOf(sel));
+  pop.innerHTML=cbL.length?cbL.map(x=>`<div class="o${x===sel?" sel":""}" role="option" data-v="${x}">${x}</div>`).join(""):`<div class="o none">No matching tier</div>`;
+  pop.hidden=false;i.setAttribute("aria-expanded","true");cbPlace();cbMark();
+}
+function cbClose(){pop.hidden=true;if(cbI)cbI.setAttribute("aria-expanded","false");cbI=null}
+function cbSet(i,v){
+  const card=i.closest(".card"),s=st(T[i.dataset.t]);
+  if(v)s.tier=v;else delete s.tier;
+  i.value=v||"";
+  if(v){const cb=card.querySelector('[data-o="demote"]');if(cb){cb.checked=true;s["o:demote"]=true}}
+  refresh();
+}
+pop.addEventListener("mousedown",e=>e.preventDefault());
+pop.addEventListener("click",e=>{const o=e.target.closest(".o[data-v]");if(o&&cbI){const i=cbI;cbSet(i,o.dataset.v);cbClose()}});
+list.addEventListener("focusin",e=>{if(e.target.classList.contains("cbi")){e.target.select();cbShow(e.target,false)}});
+list.addEventListener("focusout",e=>{
+  const i=e.target;if(!i.classList||!i.classList.contains("cbi"))return;
+  const s=st(T[i.dataset.t]),v=i.value.trim().toUpperCase();
+  if(!v){if(s.tier)cbSet(i,"")}else if(TIERS.includes(v)){if(s.tier!==v)cbSet(i,v)}
+  i.value=s.tier||"";cbClose();
+});
+list.addEventListener("keydown",e=>{
+  const i=e.target;if(!i.classList||!i.classList.contains("cbi"))return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();if(pop.hidden){cbShow(i,false);return}
+    if(cbL.length){cbA=(cbA+(e.key==="ArrowDown"?1:-1)+cbL.length)%cbL.length;cbMark()}}
+  else if(e.key==="Enter"){if(!pop.hidden&&cbL[cbA]){e.preventDefault();cbSet(i,cbL[cbA]);cbClose()}}
+  else if(e.key==="Escape"){e.stopPropagation();i.value=st(T[i.dataset.t]).tier||"";cbClose()}
+});
+addEventListener("scroll",cbPlace,{passive:true});addEventListener("resize",cbPlace);
+let gsec="helpers";
+const cp=(s,c)=>`<code class="${c}" tabindex="0" role="button" data-copy="${esc(s)}" title="Click to copy">${esc(s)}</code>`;
+const cmd=s=>cp(s,"cmd"),ch=id=>cp("<#"+id+">","dc"),rl=s=>`<span class="rl">${s}</span>`;
+const ul=a=>`<ul>${a.map(x=>`<li>${x}</li>`).join("")}</ul>`,ol=a=>`<ol>${a.map(x=>`<li>${x}</li>`).join("")}</ol>`;
+const sec=(t,b,o=true)=>`<details class="gc"${o?" open":""}><summary><span>${t}</span>${ic("chev","chev")}</summary><div class="gb">${b}</div></details>`;
+const gnote=(w,t,b)=>`<div class="${w?"gwarn":"gnote"}">${ic(w?"alert":"guide")}<div>${t?`<b>${t}</b>`:""}${b}</div></div>`;
+const GTABS=[["helpers","Helpers","general"],["testers","Testers","trophy"],["mods","Moderators","shield"],["rules","Staff Rules &amp; Punishments","alert"]];
+const CHAT="1334012945654612010",CARL="1317971631913701492",LOG="https://discord.com/channels/1317971630886227998/1317971631313784991";
+const GP={
+helpers:()=>`<div class="ghead"><h2>Helper Guide</h2><p>Welcome to the Helper Team! This guide provides basic guidelines for navigating situations you may encounter as a staff member.</p><p>Helpers are responsible for keeping the community tidy by reporting rule-breakers, handling support tickets, and managing evaluations and high tests.</p></div>`
++gnote(1,"","<p>Violating the staff rules outlined in the Staff Rules &amp; Punishments section may result in demotion. <button class=\"glink\" data-g=\"rules\">Open Staff Rules &amp; Punishments</button></p>")
++sec("Chat Moderation",ul([
+"Helpers are responsible for chat moderation and have permission to delete messages.",
+`If you encounter inappropriate messages, take a screenshot, create a report in ${ch(CHAT)}, and then delete the message.`,
+`You may also delete reported messages from ${ch(CHAT)} if they have not already been handled.`]))
++sec("Support Tickets",ul([
+"Remain respectful and professional when handling support tickets.",
+"Stay on topic and maintain a positive attitude.",
+`If a ticket requires a ${rl("Regulator")} or higher, such as Player Reports, Cooldown Resets, Forcetests, or Retirements, clearly explain why you are pinging them.`,
+"Ideally, provide a brief summary when requesting their assistance.",
+"If you are unsure how to handle a ticket, ask another staff member for help."])),
+testers:()=>`<div class="ghead"><h2>Tester Guide</h2></div>`
++sec("Testing","<p>When evaluating players, consider more than just their score. Pay attention to their mechanics and overall game sense.</p>"+ul([
+"Use FT3 as the benchmark for unranked tests.",
+"If the score becomes 2-0 in your favor, you may end the test early <b>if</b> you are confident that you can assign an accurate tier.",
+"If the player wins with a score of 3-1 or better, they should be tested by a higher-tier tester.",
+"A 3-2 win leaves it to your discretion whether to pass them.",
+"LT3 players in the queue must first be assessed by an LT3 tester before facing an HT3 opponent.",
+"You may demote LT3 players if you do not believe they meet LT3 level."]))
++sec("Bot / Testing Procedure","<p class=\"hint\">Follow these steps in order.</p>"+ol([
+`Mark your availability using ${cmd("/start")} for your designated region.`,
+`This command sends an ${rl("@here")} alert to available players on the regional waitlist.`,
+`A real-time updating queue will appear. Use ${cmd("/next")} to progress to the front of the line.`,
+`When you call ${cmd("/next")}, a ticket channel opens containing the player's submitted information.`,
+`After testing concludes, execute ${cmd("/close <Tier>")} to update the player's Tier roles and log the test result in:<br><a href="${LOG}" target="_blank" rel="noopener">${LOG}</a>`,
+"If there is no tier change, simply reapply their current tier using the same command.",
+`Use ${cmd("/next")} again to assist the following player.`,
+`Once all tests are completed, use ${cmd("/stop")} to avoid unnecessary delays.`]))
++sec("Additional Notes",ul([
+"Managing multiple tickets simultaneously is acceptable.",
+`If a player does not respond immediately, move on using ${cmd("/next")}, but wait at least 5 minutes for a response.`,
+`Use ${cmd("/add")} to include additional participants, such as another tester or the player.`,
+`Use ${cmd("/remove")} to remove someone.`,
+`If a player fails to respond or opts out of testing, use ${cmd("/skip")} to close the ticket without impact.`,
+`Use ${cmd("/exempt")} if a tester is waiting or a player is unavailable, preventing the system from automatically closing the ticket.`,
+`Confirm that the player has access to the ticket. If not, add them using ${cmd("/add")}.`,
+`For players from regions with high latency, consider adding a tester from a nearby region using ${cmd("/add")}.`]))
++sec("Commands List",`<div class="gt"><table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody>`+[
+["/start","Initiates the queue and alerts available players with an @here ping."],
+["/next","Creates a new ticket for the next person in line."],
+["/skip","Closes the active ticket without assigning a tier or cooldown."],
+["/close <tier>","Closes the ticket and sets the player's tier."],
+["/exempt","Prevents a ticket from automatically closing if further delay is expected."],
+["/stop","Ends the current testing queue session."],
+["/stats @user","Retrieves monthly and cumulative test counts."]].map(r=>`<tr><td>${cmd(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("")+`</tbody></table></div>`)
++sec("Quota Requirements",gnote(0,"Minimum 20 tests per month","<p>Testers must complete a minimum of <b>20 tests per month</b> to maintain their tester role.</p>")+`<p>If you cannot meet this quota for valid reasons, consult a ${rl("Regulator")} to request a possible exemption for that specific month.</p>`),
+mods:()=>`<div class="ghead"><h2>Basic Moderation Guide</h2><p>Welcome to the Moderation Team!</p><p>Moderators are responsible for keeping the community tidy, enforcing rules, and maintaining order.</p></div>`
++gnote(0,"","<p>Moderator is a voluntary position. Being inactive for extended, unspecified periods may result in demotion.</p><p>If you have questions or are unsure how to handle a situation, ask another Moderator or a senior staff member.</p>")
++sec("Network Hub","<p>Moderators are eligible to receive a sub-role in the Network Hub to assist with tickets concerning that server.</p><p>If you have not joined the Network Hub yet, use the link posted in the 🌎┃network channel.</p>")
++sec("MCTIERS Verification Troubleshooting","<p>If a user experiences verification issues, suggest the following:</p>"+ol([
+"Use Direct Connect.","Close Minecraft and the launcher completely.","Re-login to the Microsoft account in the launcher.","Try joining the verification server using an unmodded Vanilla Minecraft client."]))
++sec("Troubleshooting Post-Unban Lockouts","<p>For users who are still unable to join the server after being unbanned:</p>"+ol([
+"Double-check the user's ban status.","Ensure the user does not have any other banned accounts.",
+"If other accounts are banned, either unban those accounts or advise the user to join from another IP address.",
+"A VPN or mobile data connection may be used to achieve this.",
+"If none of these solutions work, have the user attempt to join using browser Discord."])),
+rules:()=>`<div class="ghead"><h2>Staff Rules &amp; Punishments</h2><p>Applies to all staff roles.</p></div>`
++gnote(1,"Strict Staff Violation Policy","<p>Staff members are expected to follow all staff rules without exceptions.</p>"+ul([
+"Staff rules are mandatory, not optional.","Violations will be taken seriously.","Claiming ignorance of the rules does not excuse breaking them.",
+"Serious violations, especially leaking staff information, accepting payments, abusing permissions, or deliberately disrupting staff operations, must be escalated to senior staff.",
+"Depending on the severity and circumstances, violations may result in warnings, removal of permissions, demotion, or removal from the staff team.",
+"Final punishment decisions remain with the appropriate senior staff."]))
++sec("Staff Rules",`<ol class="rules"><li class="sv">Do not leak anything in tester chat or staff chats under any circumstances. This rule is taken <b>VERY</b> seriously.</li><li>Toxicity and disruptive or excessively negative activity are strictly forbidden.</li><li>Always remain respectful and professional when handling support tickets. Stay on topic and maintain a positive attitude.</li><li>Taking any form of payment from players in exchange for testing, receiving tiers, skipping players, boosting other players, or similar activities is forbidden and may result in punishment.</li><li class="sv">Do not attempt to screenshare players. This permission is restricted to ${rl("Regulators")} and above. This rule is taken <b>VERY</b> seriously.</li></ol>`)
++sec("Punishments",`<div class="pgrid">`+[
+["Participating in Discord Through Unknown Alternate Accounts","Usually an account ban","b",["This should usually result in an account ban unless there is clearly no negative intent."]],
+["Harassment / Threats / Phishing / Malware / Doxing / DDoSing","Ban immediately","b",[]],
+["NSFW Media / Discussions","7-day timeout or instant ban","t",["Any NSFW media should result in an instant ban."]],
+["Excessive Toxicity","7-day timeout or instant ban","t",["Use discretion.","Includes discrimination or taking insults to a deeply personal level."]],
+["Malicious Gossip","7-day timeout or instant ban","t",["Use discretion.","Includes spreading false rumors or intentionally mischaracterizing people to damage their reputation."]],
+["Spamming","Use discretion","d",["Depends on severity.","For example, hateful spam may be considered malicious and banworthy, whereas minor repetition may not be ill-intended."]],
+["Troll Tickets &amp; Forum Posts","7-day timeout with a warning","t",["Future offenses should result in a ban."]],
+["Advertising","7-day timeout","t",["Excessive advertising in chat should result in a 7-day timeout.","Future offenses should result in a ban.","Blatantly unsolicited advertising through DMs should result in an instant ban."]]
+].map(p=>`<div class="pi"><h4>${p[0]}</h4><span class="ptag ${p[2]}">${p[1]}</span>${p[3].length?ul(p[3]):""}</div>`).join("")+`</div>`)
++sec("Blacklists","<p>When a user is blacklisted:</p>"+ol([
+`A message will appear in ${cp("#blacklisted-players","dc")} containing the user's Discord ID.`,"Ban the user.","React with a checkmark once the ban is completed.",
+`You can use Discord's ${cmd("/ban")} command to ban users who are not in the server.`])+gnote(1,"Important",`<p>Use Carl-Bot for all bans in ${ch(CARL)}.</p>`))
++sec("Moderation Philosophy","<p>Moderation should consider intent and context.</p><p>Do not enforce rules to an obsessive degree when members are clearly not causing any significant problems.</p><p>We want our communities to remain open and welcoming. Excessively strict moderation can create unnecessary frustration and negatively affect how members view the staff team.</p>")
+};
+function guideHTML(){
+  return `<div class="gwrap"><div class="gtabs" role="tablist" aria-label="Guide sections">${GTABS.map(g=>`<button class="gtab${g[0]===gsec?" on":""}" role="tab" aria-selected="${g[0]===gsec}" data-g="${g[0]}">${ic(g[2])}<span>${g[1]}</span></button>`).join("")}</div><div class="gpanel" id="gpanel">${GP[gsec]()}</div></div>`;
+}
+function gGo(k){
+  if(k===gsec)return;
+  gsec=k;
+  list.querySelectorAll(".gtab").forEach(b=>{const on=b.dataset.g===k;b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+  const p=$("#gpanel");if(!p)return;
+  clearTimeout(gGo.t);p.classList.add("out");
+  gGo.t=setTimeout(()=>{p.innerHTML=GP[gsec]();p.classList.remove("out","swap");void p.offsetWidth;p.classList.add("swap");
+    const r=$(".gtabs").getBoundingClientRect();if(r.top<0)scrollTo({top:scrollY+r.top-72,behavior:"smooth"})},130);
+}
+list.addEventListener("click",e=>{
+  const g=e.target.closest("[data-g]");
+  if(g){gGo(g.dataset.g);return}
+  const c=e.target.closest("[data-copy]");
+  if(c){copyText(c.dataset.copy);toast("Copied "+c.dataset.copy)}
+});
+list.addEventListener("keydown",e=>{
+  if(e.target.classList&&e.target.classList.contains("gtab")&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){e.preventDefault();const i=GTABS.findIndex(g=>g[0]===gsec),n=GTABS[(i+(e.key==="ArrowRight"?1:-1)+GTABS.length)%GTABS.length][0];gGo(n);list.querySelector(`.gtab[data-g="${n}"]`).focus()}
+  if((e.key==="Enter"||e.key===" ")&&e.target.dataset&&e.target.dataset.copy){e.preventDefault();e.target.click()}});
+if(scrollY>10)closeSearch();
+render(false);
+</script>
+</body>
+</html>
